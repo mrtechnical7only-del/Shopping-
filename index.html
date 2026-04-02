@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reliance Smart Point Instant Voucher</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .product-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: hidden;
+            padding: 24px;
+        }
+
+        .voucher-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #d32f2f, #e53935);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .voucher-image h1 {
+            margin: 0;
+            font-size: 32px;
+            letter-spacing: 2px;
+        }
+
+        .voucher-image p {
+            margin: 5px 0 0;
+            font-size: 18px;
+            letter-spacing: 5px;
+        }
+
+        .gold-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(90deg, #d4af37, #f3e5ab, #d4af37);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .product-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+
+        .select-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .options-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-card {
+            flex: 1;
+            background-color: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px 8px;
+            text-align: center;
+            color: #a0a0a0;
+            cursor: not-allowed;
+            position: relative;
+            opacity: 0.7;
+        }
+
+        .option-card .value {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            text-decoration: line-through;
+        }
+
+        .option-card .out-of-stock-text {
+            color: #d32f2f;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .notice-box {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-area {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #a0a0a0;
+        }
+
+        .btn-cart {
+            background-color: #bdbdbd;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="product-container">
+        <div class="voucher-image">
+            <h1>SMART</h1>
+            <p>POINT</p>
+            <div class="gold-bar"></div>
+        </div>
+
+        <div class="product-title">Reliance Smart Point Instant Voucher</div>
+        
+        <div class="notice-box">
+            ⚠️ Alert: All vouchers are currently Out of Stock. New stock will be available on 5th of April 2026.
+        </div>
+
+        <div class="select-title">Select Option</div>
+        
+        <div class="options-container">
+            <div class="option-card">
+                <div class="value">₹1,000</div>
+                <div class="out-of-stock-text">Out of Stock</div>
+            </div>
+            <div class="option-card">
+                <div class="value">₹2,000</div>
+                <div class="out-of-stock-text">Out of Stock</div>
+            </div>
+            <div class="option-card">
+                <div class="value">₹5,000</div>
+                <div class="out-of-stock-text">Out of Stock</div>
+            </div>
+        </div>
+
+        <div class="action-area">
+            <div>
+                <div class="total-price">₹0</div>
+                <div style="font-size: 12px; color: #a0a0a0;">Inclusive of all taxes</div>
+            </div>
+            <button class="btn-cart" disabled>Add to cart</button>
+        </div>
+    </div>
+
+</body>
+</html>
+
