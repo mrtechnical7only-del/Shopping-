@@ -3,196 +3,321 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reliance Smart Point Instant Voucher</title>
+    <title>Reliance Smart Point Vouchers</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        /* Custom font for the Smart Point logo feel */
+        @import url('https://fonts.googleapis.com/css2?family=Arial+Black&display=swap');
+        
+        .smart-font {
+            font-family: 'Arial Black', sans-serif;
         }
 
-        body {
-            background-color: #f4f6f8;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .product-container {
-            background-color: #ffffff;
-            width: 100%;
-            max-width: 600px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            overflow: hidden;
-            padding: 24px;
-        }
-
-        .voucher-image {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(135deg, #d32f2f, #e53935);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        /* Styling for disabled state to make it look 'Out of Stock' */
+        .voucher-option {
+            transition: all 0.2s;
             position: relative;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .voucher-option.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            border-color: #e5e7eb;
+            background-color: #fff;
         }
 
-        .voucher-image h1 {
-            margin: 0;
-            font-size: 32px;
-            letter-spacing: 2px;
+        .voucher-option.selected.disabled {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
         }
 
-        .voucher-image p {
-            margin: 5px 0 0;
-            font-size: 18px;
-            letter-spacing: 5px;
-        }
-
-        .gold-bar {
+        /* Diagonal line for out of stock options */
+        .strike-through-overlay {
             position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 20px;
-            background: linear-gradient(90deg, #d4af37, #f3e5ab, #d4af37);
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
-        }
-
-        .product-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-            margin-top: 24px;
-            margin-bottom: 8px;
-        }
-
-        .select-title {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 16px;
-            font-weight: 500;
-        }
-
-        .options-container {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .option-card {
-            flex: 1;
-            background-color: #f9f9f9;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 16px 8px;
-            text-align: center;
-            color: #a0a0a0;
-            cursor: not-allowed;
-            position: relative;
-            opacity: 0.7;
-        }
-
-        .option-card .value {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 4px;
-            text-decoration: line-through;
-        }
-
-        .option-card .out-of-stock-text {
-            color: #d32f2f;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .notice-box {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-            padding: 16px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 24px;
+            inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            pointer-events: none;
         }
-
-        .action-area {
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .total-price {
-            font-size: 18px;
-            font-weight: bold;
-            color: #a0a0a0;
-        }
-
-        .btn-cart {
-            background-color: #bdbdbd;
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: not-allowed;
+        
+        .strike-through-line {
+            width: 100%;
+            height: 1px;
+            background-color: #f87171; /* Tailwind red-400 */
+            transform: rotate(-25deg);
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen bg-gray-50 font-sans text-gray-800">
 
-    <div class="product-container">
-        <div class="voucher-image">
-            <h1>SMART</h1>
-            <p>POINT</p>
-            <div class="gold-bar"></div>
-        </div>
+    <!-- Top Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo & Mobile Menu -->
+                <div class="flex items-center">
+                    <button class="p-2 -ml-2 mr-2 md:hidden text-gray-600 hover:text-gray-900">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <div class="flex-shrink-0 flex items-center cursor-pointer">
+                        <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500">
+                            VoucherMart
+                        </span>
+                    </div>
+                </div>
 
-        <div class="product-title">Reliance Smart Point Instant Voucher</div>
-        
-        <div class="notice-box">
-            ⚠️ Alert: All vouchers are currently Out of Stock. New stock will be available on 5th of April 2026.
-        </div>
+                <!-- Search Bar (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-2xl mx-8">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="h-5 w-5 text-gray-400"></i>
+                        </div>
+                        <input
+                            type="text"
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                            placeholder="Search for gift cards, vouchers..."
+                        >
+                    </div>
+                </div>
 
-        <div class="select-title">Select Option</div>
-        
-        <div class="options-container">
-            <div class="option-card">
-                <div class="value">₹1,000</div>
-                <div class="out-of-stock-text">Out of Stock</div>
+                <!-- Right Icons -->
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-blue-600 transition p-2">
+                        <i data-lucide="user" class="w-6 h-6"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-blue-600 transition p-2 relative">
+                        <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full">
+                            0
+                        </span>
+                    </button>
+                </div>
             </div>
-            <div class="option-card">
-                <div class="value">₹2,000</div>
-                <div class="out-of-stock-text">Out of Stock</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Breadcrumbs -->
+        <nav class="flex text-sm text-gray-500 mb-6 space-x-2 items-center">
+            <a href="#" class="hover:text-blue-600">Home</a>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            <a href="#" class="hover:text-blue-600">Gift Vouchers</a>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            <span class="text-gray-900 font-medium">Reliance Smart</span>
+        </nav>
+
+        <div class="flex flex-col lg:flex-row gap-10">
+            <!-- Left Column: Product Image -->
+            <div class="w-full lg:w-5/12 flex flex-col gap-4">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center min-h-[400px] relative overflow-hidden">
+                    <!-- Simulated Smart Point Card -->
+                    <div class="w-full max-w-sm aspect-[1.6/1] bg-red-600 rounded-xl shadow-lg relative border-b-8 border-yellow-400 flex flex-col items-center justify-center overflow-hidden">
+                        <div class="absolute top-0 left-0 w-24 h-24">
+                            <!-- Decorative Bow outline -->
+                            <svg viewBox="0 0 100 100" class="w-full h-full text-yellow-300 opacity-80 drop-shadow-md">
+                                <path d="M10,10 Q30,0 50,20 Q70,0 90,10 Q80,30 50,20 Q20,30 10,10 Z" fill="currentColor"/>
+                                <path d="M50,20 L30,60 L50,80 L70,60 Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        
+                        <div class="z-10 flex items-center space-x-2">
+                            <!-- Fake Reliance Logo Icon -->
+                            <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-red-500 text-xl font-bold border-2 border-white shadow-sm">
+                                <span class="drop-shadow-sm">R</span>
+                            </div>
+                            <h2 class="text-4xl font-extrabold text-blue-900 tracking-tight smart-font">
+                                <span class="text-white drop-shadow-md">SMART</span>
+                            </h2>
+                        </div>
+                        <h3 class="z-10 text-xl font-bold text-white tracking-[0.2em] mt-1 drop-shadow-sm">
+                            POINT
+                        </h3>
+                    </div>
+                    
+                    <!-- Out of Stock Overlay on Image -->
+                    <div class="absolute inset-0 bg-white/40 flex items-center justify-center backdrop-blur-[1px]">
+                        <div class="bg-red-600 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg transform -rotate-12 border-2 border-white">
+                            OUT OF STOCK
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-2">
+                    <p class="text-xs text-gray-400 text-center">Images are for representation purpose only.</p>
+                </div>
             </div>
-            <div class="option-card">
-                <div class="value">₹5,000</div>
-                <div class="out-of-stock-text">Out of Stock</div>
+
+            <!-- Right Column: Product Details -->
+            <div class="w-full lg:w-7/12 flex flex-col">
+                <div class="mb-2">
+                    <span class="inline-block px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                        INSTANT VOUCHER
+                    </span>
+                </div>
+                
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                    Reliance Smart Point Instant Voucher
+                </h1>
+                
+                <div class="mt-4 mb-6 pb-6 border-b border-gray-200">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <span id="price-display" class="text-3xl font-bold text-gray-900">₹1000</span>
+                        <span id="mrp-display" class="text-sm text-gray-500 line-through">₹1000</span>
+                        <span class="text-sm font-medium text-green-600">0% OFF</span>
+                    </div>
+                    
+                    <!-- Custom Out of Stock Message -->
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3 mb-2">
+                        <i data-lucide="alert-circle" class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"></i>
+                        <div>
+                            <h4 class="text-sm font-semibold text-red-800">Currently Unavailable</h4>
+                            <p class="text-sm text-red-600 mt-1 font-medium">
+                                Stock 5th of April 2026 ku available huga.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voucher Values Selection -->
+                <div class="mb-8">
+                    <h3 class="text-sm font-medium text-gray-900 mb-3">Select Option</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="voucher-options">
+                        <!-- Options generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3 mb-8">
+                    <button 
+                        disabled
+                        class="w-full sm:w-1/2 flex items-center justify-center py-3.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-400 cursor-not-allowed"
+                    >
+                        Add to cart
+                    </button>
+                    <button 
+                        disabled
+                        class="w-full sm:w-1/2 flex items-center justify-center py-3.5 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-500 bg-gray-100 cursor-not-allowed"
+                    >
+                        Buy Now
+                    </button>
+                </div>
+
+                <!-- Accordion Sections -->
+                <div class="border-t border-gray-200 divide-y divide-gray-200">
+                    <div class="py-5">
+                        <h3 class="text-base font-semibold text-gray-900 flex justify-between items-center cursor-pointer">
+                            How to redeem
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 transform rotate-90"></i>
+                        </h3>
+                        <div class="mt-4 space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 font-bold text-xs mt-0.5">
+                                    1
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600">
+                                    <strong class="text-gray-900 block mb-1">Step 1</strong>
+                                    Visit listed outlet. You can locate the outlet via the store locator.
+                                </p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 font-bold text-xs mt-0.5">
+                                    2
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600">
+                                    <strong class="text-gray-900 block mb-1">Step 2</strong>
+                                    Select your choice of product and go to the billing counter.
+                                </p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 font-bold text-xs mt-0.5">
+                                    3
+                                </div>
+                                <p class="ml-3 text-sm text-gray-600">
+                                    <strong class="text-gray-900 block mb-1">Step 3</strong>
+                                    Share the voucher code with the cashier before billing.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="py-5">
+                        <h3 class="text-base font-semibold text-gray-900 flex justify-between items-center cursor-pointer">
+                            Important Information
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
+                        </h3>
+                    </div>
+                </div>
+
             </div>
         </div>
+    </main>
 
-        <div class="action-area">
-            <div>
-                <div class="total-price">₹0</div>
-                <div style="font-size: 12px; color: #a0a0a0;">Inclusive of all taxes</div>
-            </div>
-            <button class="btn-cart" disabled>Add to cart</button>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+            <p>© 2026 VoucherMart Inc. All rights reserved.</p>
         </div>
-    </div>
+    </footer>
 
+    <!-- JavaScript logic -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Voucher Data
+        const vouchers = [
+            { id: 1, value: 1000, price: 1000 },
+            { id: 2, value: 2000, price: 2000 },
+            { id: 3, value: 5000, price: 5000 },
+        ];
+
+        let selectedVoucherValue = 1000;
+        const optionsContainer = document.getElementById('voucher-options');
+        const priceDisplay = document.getElementById('price-display');
+        const mrpDisplay = document.getElementById('mrp-display');
+
+        // Function to render buttons
+        function renderOptions() {
+            optionsContainer.innerHTML = ''; // Clear container
+            
+            vouchers.forEach(v => {
+                const isSelected = selectedVoucherValue === v.value;
+                const buttonClasses = `voucher-option disabled rounded-lg border-2 p-3 text-left focus:outline-none flex flex-col justify-between ${isSelected ? 'selected' : ''}`;
+                
+                const buttonHTML = `
+                    <button class="${buttonClasses}" onclick="selectVoucher(${v.value})" disabled>
+                        <div class="w-full h-16 bg-gradient-to-br from-[#c89845] to-[#f4d17f] rounded flex items-center justify-center mb-2 shadow-inner border border-yellow-600/30 relative">
+                            <span class="text-white font-bold drop-shadow-md text-sm">CARD VALUE</span><br/>
+                            <span class="text-white font-bold drop-shadow-md absolute mt-6 text-lg">₹${v.value}</span>
+                        </div>
+                        <div class="text-center w-full">
+                            <span class="text-sm font-semibold text-gray-900">Pay ₹${v.price}</span>
+                        </div>
+                        <div class="strike-through-overlay">
+                            <div class="strike-through-line"></div>
+                        </div>
+                    </button>
+                `;
+                optionsContainer.insertAdjacentHTML('beforeend', buttonHTML);
+            });
+        }
+
+        // Function to handle selection (even though they are disabled, if we wanted to allow clicking to see price changes)
+        // Currently disabled via HTML attribute so this won't fire unless disabled is removed
+        function selectVoucher(value) {
+            selectedVoucherValue = value;
+            priceDisplay.textContent = `₹${value}`;
+            mrpDisplay.textContent = `₹${value}`;
+            renderOptions();
+        }
+
+        // Initial render
+        renderOptions();
+    </script>
 </body>
 </html>
 
