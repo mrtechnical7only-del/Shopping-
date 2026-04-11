@@ -24,7 +24,7 @@
         
         .voucher-option.disabled {
             opacity: 0.6;
-            cursor: not-allowed;
+            cursor: pointer; /* Changed to pointer so click works */
             border-color: #e5e7eb;
             background-color: #fff;
         }
@@ -49,15 +49,6 @@
             height: 1px;
             background-color: #f87171; /* Tailwind red-400 */
             transform: rotate(-25deg);
-        }
-
-        /* Timer animation */
-        @keyframes pulse-soft {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        .timer-pulse {
-            animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
 
         /* Loading Overlay Styling */
@@ -213,18 +204,14 @@
                         <span class="text-sm font-medium text-green-600">0% OFF</span>
                     </div>
                     
-                    <!-- Timer Countdown Message -->
-                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 flex items-start space-x-4 mb-2">
-                        <div class="bg-orange-100 p-2 rounded-full flex-shrink-0">
-                            <i data-lucide="clock" class="w-6 h-6 text-orange-600"></i>
-                        </div>
-                        <div class="w-full">
-                            <h4 class="text-sm font-bold text-orange-800 uppercase tracking-wide">Stock Available In</h4>
-                            <div class="flex items-center space-x-2 mt-1">
-                                <span id="countdown-timer" class="text-2xl font-black text-orange-600 font-mono tracking-wider timer-pulse">
-                                    Loading...
-                                </span>
-                            </div>
+                     <!-- Custom Out of Stock Message (Timer removed) -->
+                     <div class="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3 mb-2">
+                        <i data-lucide="alert-circle" class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"></i>
+                        <div>
+                            <h4 class="text-sm font-semibold text-red-800">Currently Unavailable</h4>
+                            <p class="text-sm text-red-600 mt-1 font-medium">
+                                Stock will be available soon.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -241,13 +228,13 @@
                 <div class="flex flex-col sm:flex-row gap-3 mb-8">
                     <button 
                         onclick="showLoading()"
-                        class="w-full sm:w-1/2 flex items-center justify-center py-3.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-400 cursor-not-allowed hover:bg-gray-500 transition"
+                        class="w-full sm:w-1/2 flex items-center justify-center py-3.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-400 cursor-pointer hover:bg-gray-500 transition"
                     >
                         Add to cart
                     </button>
                     <button 
                         onclick="showLoading()"
-                        class="w-full sm:w-1/2 flex items-center justify-center py-3.5 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-500 bg-gray-100 cursor-not-allowed hover:bg-gray-200 transition"
+                        class="w-full sm:w-1/2 flex items-center justify-center py-3.5 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-500 bg-gray-100 cursor-pointer hover:bg-gray-200 transition"
                     >
                         Buy Now
                     </button>
@@ -325,7 +312,7 @@
             
             vouchers.forEach(v => {
                 const isSelected = selectedVoucherValue === v.value;
-                // Saare options disabled rahenge
+                // Changed cursor to pointer and added hover effect, removed disabled attribute for clickability
                 const buttonClasses = `voucher-option disabled rounded-lg border-2 p-3 text-left focus:outline-none flex flex-col justify-between ${isSelected ? 'selected' : ''} cursor-pointer hover:bg-gray-50`;
                 
                 const buttonHTML = `
@@ -348,70 +335,13 @@
 
         renderOptions();
 
-        // --- BULLETPROOF TIMER LOGIC ---
-        function initTimer() {
-            const timerElement = document.getElementById('countdown-timer');
-            const storageKey = 'smartVoucher_Target_Time_v2'; // Updated key
-            const hours24 = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-            let targetTime;
-
-            try {
-                let savedTimeStr = localStorage.getItem(storageKey);
-                let now = new Date().getTime();
-
-                if (savedTimeStr && !isNaN(parseInt(savedTimeStr))) {
-                    targetTime = parseInt(savedTimeStr);
-                    
-                    if (now > targetTime) {
-                        targetTime = now + hours24;
-                        localStorage.setItem(storageKey, targetTime.toString());
-                    }
-                } else {
-                    targetTime = now + hours24;
-                    localStorage.setItem(storageKey, targetTime.toString());
-                }
-            } catch (error) {
-                console.warn("Storage access restricted. Timer will restart on refresh.");
-                targetTime = new Date().getTime() + hours24;
-            }
-
-            function updateDisplay() {
-                const now = new Date().getTime();
-                const distance = targetTime - now;
-
-                if (distance <= 0) {
-                    timerElement.innerHTML = "AVAILABLE NOW";
-                    timerElement.classList.remove("timer-pulse", "text-orange-600");
-                    timerElement.classList.add("text-green-600");
-                    return; 
-                }
-
-                const totalSeconds = Math.floor(distance / 1000);
-                const hours = Math.floor(totalSeconds / 3600);
-                const minutes = Math.floor((totalSeconds % 3600) / 60);
-                const seconds = totalSeconds % 60;
-
-                const formattedTime = 
-                    String(hours).padStart(2, '0') + ":" + 
-                    String(minutes).padStart(2, '0') + ":" + 
-                    String(seconds).padStart(2, '0');
-
-                timerElement.innerText = formattedTime + " HRS";
-            }
-
-            setInterval(updateDisplay, 1000);
-            updateDisplay(); 
-        }
-
-        initTimer();
-
         // --- LOADING OVERLAY LOGIC ---
         function showLoading(event) {
             if(event) event.preventDefault(); // Prevent default link behavior
             const overlay = document.getElementById('loading-overlay');
             overlay.style.display = 'flex';
 
-            // 2 seconds ke baad overlay hatao (optional)
+            // 2 seconds ke baad overlay hatao
             setTimeout(() => {
                 overlay.style.display = 'none';
             }, 2000);
