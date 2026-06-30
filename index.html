@@ -1,360 +1,440 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reliance Smart Point Vouchers</title>
-    <!-- Tailwind CSS CDN -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Packs_n_Bakes By Saleha</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        /* Custom font for the Smart Point logo feel */
-        @import url('https://fonts.googleapis.com/css2?family=Arial+Black&display=swap');
-        
-        .smart-font {
-            font-family: 'Arial Black', sans-serif;
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
+        .hidden-view { display: none !important; }
+        .modal-enter { animation: slideUp 0.3s ease-out forwards; }
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
-
-        /* Styling for disabled state to make it look 'Out of Stock' */
-        .voucher-option {
-            transition: all 0.2s;
-            position: relative;
-        }
-        
-        .voucher-option.disabled {
-            opacity: 0.6;
-            cursor: pointer; /* Changed to pointer so click works */
-            border-color: #e5e7eb;
-            background-color: #fff;
-        }
-
-        .voucher-option.selected.disabled {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
-        }
-
-        /* Diagonal line for out of stock options */
-        .strike-through-overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-        }
-        
-        .strike-through-line {
-            width: 100%;
-            height: 1px;
-            background-color: #f87171; /* Tailwind red-400 */
-            transform: rotate(-25deg);
-        }
-
-        /* Loading Overlay Styling */
-        #loading-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background-color: rgba(255, 255, 255, 0.9);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3b82f6; /* Tailwind blue-500 */
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="min-h-screen bg-gray-50 font-sans text-gray-800">
+<body class="bg-gray-100 text-gray-800">
 
-    <!-- Loading Overlay -->
-    <div id="loading-overlay">
-        <div class="spinner mb-4"></div>
-        <h2 class="text-xl font-bold text-gray-800 mb-2">Loading...</h2>
-        <p class="text-red-600 font-medium">Stock Will Available Soon</p>
+    <div class="max-w-md mx-auto bg-white min-h-screen relative shadow-2xl pb-20 overflow-x-hidden">
+
+        <div id="customer-view" class="w-full min-h-screen bg-pink-50">
+            <div class="bg-gradient-to-br from-pink-200 to-rose-100 rounded-b-[2.5rem] p-8 text-center shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-20"><i data-lucide="cake" class="w-24 h-24 text-rose-500"></i></div>
+                <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg border-4 border-pink-50 mb-3 relative z-10">
+                    <i data-lucide="cookie" class="w-12 h-12 text-rose-400"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold text-gray-800 tracking-tight z-10 relative">Packs_n_Bakes</h1>
+                <p class="text-rose-600 font-semibold mb-1 z-10 relative">By Saleha ✨</p>
+                <p class="text-gray-600 text-xs font-medium z-10 relative">Baking happiness in every bite | Nanded 📍</p>
+            </div>
+
+            <div class="px-5 mt-6 mb-4">
+                <h2 class="text-lg font-bold text-gray-800 flex items-center mb-4">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 mr-2 text-pink-500"></i> Hamare Specials
+                </h2>
+
+                <div onclick="openOrderModal('Custom Chocolate Cake')" class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 mb-3 flex items-center cursor-pointer active:scale-95 transition-transform">
+                    <div class="w-14 h-14 bg-pink-50 rounded-xl flex items-center justify-center mr-4 shrink-0"><i data-lucide="cake" class="w-8 h-8 text-pink-500"></i></div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-sm text-gray-800">Custom Cakes</h3>
+                        <p class="text-[11px] text-gray-500 line-clamp-1 mt-0.5">Aapki pasand ka design aur flavour.</p>
+                        <p class="text-rose-500 font-bold text-xs mt-1">Starting ₹800/kg</p>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+                </div>
+
+                <div onclick="openOrderModal('Brownies Box')" class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 mb-3 flex items-center cursor-pointer active:scale-95 transition-transform">
+                    <div class="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center mr-4 shrink-0"><i data-lucide="coffee" class="w-8 h-8 text-amber-600"></i></div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-sm text-gray-800">Assorted Brownies</h3>
+                        <p class="text-[11px] text-gray-500 line-clamp-1 mt-0.5">Fudgy, gooey aur bahut tasty.</p>
+                        <p class="text-rose-500 font-bold text-xs mt-1">₹450 / Box</p>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+                </div>
+
+                <div onclick="openOrderModal('Surprise Hamper')" class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 mb-3 flex items-center cursor-pointer active:scale-95 transition-transform">
+                    <div class="w-14 h-14 bg-rose-50 rounded-xl flex items-center justify-center mr-4 shrink-0"><i data-lucide="gift" class="w-8 h-8 text-rose-500"></i></div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-sm text-gray-800">Surprise Hampers</h3>
+                        <p class="text-[11px] text-gray-500 line-clamp-1 mt-0.5">Balloons aur chocolates ke sath.</p>
+                        <p class="text-rose-500 font-bold text-xs mt-1">Custom Price</p>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+                </div>
+
+                <button onclick="openOrderModal('Custom Order')" class="w-full mt-2 bg-gray-900 text-white py-3.5 rounded-2xl font-bold shadow-md hover:bg-gray-800 active:scale-95 transition-transform flex items-center justify-center text-sm">
+                    <i data-lucide="message-square-plus" class="w-5 h-5 mr-2"></i> Kuch Aur Chahiye? Order Karein
+                </button>
+            </div>
+        </div>
+
+        <div id="admin-view" class="w-full min-h-screen bg-gray-50 hidden-view">
+            <div class="bg-gray-900 text-white p-6 pb-12 rounded-b-[2rem]">
+                <h1 class="text-xl font-bold flex items-center">
+                    <i data-lucide="layout-dashboard" class="w-6 h-6 mr-2 text-rose-400"></i> Admin Panel
+                </h1>
+                <p class="text-gray-400 text-xs mt-1">Apne orders aur status yahan manage karein.</p>
+            </div>
+
+            <div class="px-5 -mt-6">
+                <div class="bg-white rounded-2xl shadow-sm p-4 border border-gray-100 mb-4 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-gray-500 font-medium">Total Orders</p>
+                        <p id="total-orders-count" class="text-2xl font-black text-gray-800">0</p>
+                    </div>
+                    <div class="flex gap-2 text-center">
+                        <div class="bg-orange-50 px-3 py-1 rounded-lg">
+                           <p class="text-[10px] text-orange-600 font-bold">Pending</p>
+                           <p id="pending-count" class="text-sm font-black text-orange-700">0</p>
+                        </div>
+                        <div class="bg-green-50 px-3 py-1 rounded-lg">
+                           <p class="text-[10px] text-green-600 font-bold">Done</p>
+                           <p id="completed-count" class="text-sm font-black text-green-700">0</p>
+                        </div>
+                     </div>
+                </div>
+
+                <div class="flex bg-gray-200 p-1 rounded-xl mb-4">
+                    <button onclick="switchTab('active')" id="tab-active" class="flex-1 py-2 text-sm font-bold rounded-lg transition-all bg-white text-gray-900 shadow-sm">Active Orders</button>
+                    <button onclick="switchTab('completed')" id="tab-completed" class="flex-1 py-2 text-sm font-bold rounded-lg transition-all text-gray-500">Completed</button>
+                </div>
+
+                <div id="loader" class="text-center py-10 hidden">
+                    <div class="animate-spin w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full mx-auto mb-2"></div>
+                    <p class="text-gray-500 text-sm">Loading orders...</p>
+                </div>
+
+                <div id="empty-state" class="text-center py-10 bg-white rounded-2xl border border-dashed border-gray-300">
+                    <i data-lucide="calendar-x-2" class="w-10 h-10 mx-auto text-gray-300 mb-2"></i>
+                    <p class="text-gray-500 text-sm">Koi order nahi hai.</p>
+                </div>
+
+                <div id="orders-container" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <div id="order-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex-col justify-end">
+            <div class="bg-white w-full max-w-md h-[85vh] rounded-t-3xl p-6 relative overflow-y-auto modal-enter shadow-2xl flex flex-col">
+                <button onclick="closeOrderModal()" class="absolute right-5 top-5 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-200">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                
+                <div id="form-content">
+                    <h2 class="text-xl font-black text-gray-800 mb-1">Place Your Order</h2>
+                    <div class="inline-block bg-rose-50 border border-rose-100 px-3 py-1 rounded-lg mb-5">
+                        <p id="modal-product-name" class="text-rose-600 text-xs font-bold">Item: Custom Order</p>
+                    </div>
+
+                    <form id="order-form" onsubmit="submitOrder(event)" class="space-y-4 pb-10">
+                        <div>
+                            <label class="text-xs font-bold text-gray-700 block mb-1">Aapka Naam *</label>
+                            <div class="relative">
+                                <i data-lucide="user" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                                <input required type="text" id="cust-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-9 pr-3 outline-none focus:border-rose-400 focus:bg-white text-sm" placeholder="Aapka naam">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-bold text-gray-700 block mb-1">WhatsApp Number *</label>
+                            <div class="relative">
+                                <i data-lucide="phone" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                                <input required type="tel" id="cust-phone" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-9 pr-3 outline-none focus:border-rose-400 focus:bg-white text-sm" placeholder="10 digit number">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-bold text-gray-700 block mb-1">Occasion (Function kya hai?)</label>
+                            <select id="cust-occasion" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none focus:border-rose-400 focus:bg-white text-sm text-gray-700">
+                                <option>Birthday 🎂</option>
+                                <option>Anniversary 💑</option>
+                                <option>Wedding 💍</option>
+                                <option>Just for Fun 🎉</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs font-bold text-gray-700 block mb-1">Kis Date Ko Chahiye? *</label>
+                                <input required type="date" id="cust-date" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none focus:border-rose-400 text-sm">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-700 block mb-1">Time? *</label>
+                                <input required type="time" id="cust-time" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none focus:border-rose-400 text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-bold text-gray-700 block mb-1">Flavour, Weight, aur Details *</label>
+                            <textarea required id="cust-details" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none focus:border-rose-400 focus:bg-white text-sm" placeholder="Cake par kya likhna hai?"></textarea>
+                        </div>
+
+                        <button id="submit-btn" type="submit" class="w-full bg-rose-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-rose-200 hover:bg-rose-600 active:scale-95 transition text-sm mt-4">
+                            Confirm Order
+                        </button>
+                    </form>
+                </div>
+
+                <div id="success-message" class="hidden flex-col items-center justify-center h-full py-10">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="check-circle-2" class="w-10 h-10 text-green-500"></i>
+                    </div>
+                    <h2 class="text-2xl font-black text-gray-800 mb-2">Order Sent!</h2>
+                    <p class="text-gray-500 text-center text-sm px-4">Aapka order database mein chala gaya hai. Hum WhatsApp par contact karenge.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t border-gray-100 flex justify-around items-center px-4 py-2 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-40 rounded-t-[2rem]">
+            <button onclick="switchView('customer')" id="btn-nav-customer" class="flex flex-col items-center p-2 text-rose-500 transition-colors">
+                <i data-lucide="store" class="w-6 h-6 mb-1"></i>
+                <span class="text-[10px] font-bold">Shop</span>
+            </button>
+            <button onclick="switchView('admin')" id="btn-nav-admin" class="flex flex-col items-center p-2 text-gray-400 transition-colors">
+                <i data-lucide="layout-dashboard" class="w-6 h-6 mb-1"></i>
+                <span class="text-[10px] font-bold">Admin Panel</span>
+            </button>
+        </div>
     </div>
 
-    <!-- Top Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo & Mobile Menu -->
-                <div class="flex items-center">
-                    <button class="p-2 -ml-2 mr-2 md:hidden text-gray-600 hover:text-gray-900 nav-link">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
-                    </button>
-                    <div class="flex-shrink-0 flex items-center cursor-pointer nav-link">
-                        <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500">
-                            VoucherMart
-                        </span>
-                    </div>
-                </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-                <!-- Search Bar (Desktop) -->
-                <div class="hidden md:flex flex-1 max-w-2xl mx-8">
-                    <div class="relative w-full">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i data-lucide="search" class="h-5 w-5 text-gray-400"></i>
-                        </div>
-                        <input
-                            type="text"
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
-                            placeholder="Search for gift cards, vouchers..."
-                            onclick="showLoading()"
-                        >
-                    </div>
-                </div>
+        // AAPKA FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmQz70AP_GThf9hMacD9vs8mMiDHrXQKM",
+            authDomain: "packs-d0cfb.firebaseapp.com",
+            projectId: "packs-d0cfb",
+            storageBucket: "packs-d0cfb.firebasestorage.app",
+            messagingSenderId: "800253335654",
+            appId: "1:800253335654:web:ee81cc1522005623fcb5a7"
+        };
 
-                <!-- Right Icons -->
-                <div class="flex items-center space-x-4">
-                    <button class="text-gray-600 hover:text-blue-600 transition p-2 nav-link">
-                        <i data-lucide="user" class="w-6 h-6"></i>
-                    </button>
-                    <button class="text-gray-600 hover:text-blue-600 transition p-2 relative nav-link">
-                        <i data-lucide="shopping-cart" class="w-6 h-6"></i>
-                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full">
-                            0
-                        </span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Breadcrumbs -->
-        <nav class="flex text-sm text-gray-500 mb-6 space-x-2 items-center">
-            <a href="#" class="hover:text-blue-600 nav-link">Home</a>
-            <i data-lucide="chevron-right" class="w-4 h-4"></i>
-            <a href="#" class="hover:text-blue-600 nav-link">Gift Vouchers</a>
-            <i data-lucide="chevron-right" class="w-4 h-4"></i>
-            <span class="text-gray-900 font-medium">Reliance Smart</span>
-        </nav>
+        let userUid = null;
+        let allOrders = [];
+        let currentProduct = '';
+        let currentAdminTab = 'active';
 
-        <div class="flex flex-col lg:flex-row gap-10">
-            <!-- Left Column: Product Image -->
-            <div class="w-full lg:w-5/12 flex flex-col gap-4">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center min-h-[400px] relative overflow-hidden">
-                    <!-- Simulated Smart Point Card -->
-                    <div class="w-full max-w-sm aspect-[1.6/1] bg-red-600 rounded-xl shadow-lg relative border-b-8 border-yellow-400 flex flex-col items-center justify-center overflow-hidden">
-                        <div class="absolute top-0 left-0 w-24 h-24">
-                            <!-- Decorative Bow outline -->
-                            <svg viewBox="0 0 100 100" class="w-full h-full text-yellow-300 opacity-80 drop-shadow-md">
-                                <path d="M10,10 Q30,0 50,20 Q70,0 90,10 Q80,30 50,20 Q20,30 10,10 Z" fill="currentColor"/>
-                                <path d="M50,20 L30,60 L50,80 L70,60 Z" fill="currentColor"/>
-                            </svg>
-                        </div>
-                        
-                        <div class="z-10 flex items-center space-x-2">
-                            <!-- Fake Reliance Logo Icon -->
-                            <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-red-500 text-xl font-bold border-2 border-white shadow-sm">
-                                <span class="drop-shadow-sm">R</span>
-                            </div>
-                            <h2 class="text-4xl font-extrabold text-blue-900 tracking-tight smart-font">
-                                <span class="text-white drop-shadow-md">SMART</span>
-                            </h2>
-                        </div>
-                        <h3 class="z-10 text-xl font-bold text-white tracking-[0.2em] mt-1 drop-shadow-sm">
-                            POINT
-                        </h3>
-                    </div>
-                    
-                    <!-- Restocking Overlay on Image -->
-                    <div class="absolute inset-0 bg-white/40 flex items-center justify-center backdrop-blur-[1px]">
-                        <div class="bg-orange-500 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg transform -rotate-12 border-2 border-white">
-                            RESTOCKING SOON
-                        </div>
-                    </div>
-                </div>
-                <div class="flex justify-center space-x-2">
-                    <p class="text-xs text-gray-400 text-center">Images are for representation purpose only.</p>
-                </div>
-            </div>
+        // Anonymous Login for customers
+        signInAnonymously(auth).then((userCred) => {
+            userUid = userCred.user.uid;
+            console.log("Logged in anonymously");
+        }).catch((error) => console.error("Auth Error:", error));
 
-            <!-- Right Column: Product Details -->
-            <div class="w-full lg:w-7/12 flex flex-col">
-                <div class="mb-2">
-                    <span class="inline-block px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
-                        INSTANT VOUCHER
-                    </span>
-                </div>
-                
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                    Reliance Smart Point Instant Voucher
-                </h1>
-                
-                <div class="mt-4 mb-6 pb-6 border-b border-gray-200">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <span id="price-display" class="text-3xl font-bold text-gray-900">₹1000</span>
-                        <span id="mrp-display" class="text-sm text-gray-500 line-through">₹1000</span>
-                        <span class="text-sm font-medium text-green-600">0% OFF</span>
-                    </div>
-                    
-                     <!-- Custom Out of Stock Message (Timer removed) -->
-                     <div class="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3 mb-2">
-                        <i data-lucide="alert-circle" class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"></i>
-                        <div>
-                            <h4 class="text-sm font-semibold text-red-800">Currently Unavailable</h4>
-                            <p class="text-sm text-red-600 mt-1 font-medium">
-                                Stock will be available soon.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+        // Fetch Orders
+        const ordersRef = collection(db, "orders");
+        onSnapshot(ordersRef, (snapshot) => {
+            allOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            allOrders.sort((a, b) => new Date(a.date) - new Date(b.date));
+            renderOrders();
+        }, (error) => console.log("Listen error:", error));
 
-                <!-- Voucher Values Selection -->
-                <div class="mb-8">
-                    <h3 class="text-sm font-medium text-gray-900 mb-3">Select Option</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="voucher-options">
-                        <!-- Options generated by JS -->
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-3 mb-8">
-                    <button 
-                        onclick="showLoading()"
-                        class="w-full sm:w-1/2 flex items-center justify-center py-3.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-400 cursor-pointer hover:bg-gray-500 transition"
-                    >
-                        Add to cart
-                    </button>
-                    <button 
-                        onclick="showLoading()"
-                        class="w-full sm:w-1/2 flex items-center justify-center py-3.5 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-500 bg-gray-100 cursor-pointer hover:bg-gray-200 transition"
-                    >
-                        Buy Now
-                    </button>
-                </div>
-
-                <!-- Accordion Sections -->
-                <div class="border-t border-gray-200 divide-y divide-gray-200">
-                    <div class="py-5">
-                        <h3 class="text-base font-semibold text-gray-900 flex justify-between items-center cursor-pointer nav-link">
-                            How to redeem
-                            <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400 transform rotate-90"></i>
-                        </h3>
-                        <div class="mt-4 space-y-4">
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 font-bold text-xs mt-0.5">
-                                    1
-                                </div>
-                                <p class="ml-3 text-sm text-gray-600">
-                                    <strong class="text-gray-900 block mb-1">Step 1</strong>
-                                    Visit listed outlet. You can locate the outlet via the store locator.
-                                </p>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 font-bold text-xs mt-0.5">
-                                    2
-                                </div>
-                                <p class="ml-3 text-sm text-gray-600">
-                                    <strong class="text-gray-900 block mb-1">Step 2</strong>
-                                    Select your choice of product and go to the billing counter.
-                                </p>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 font-bold text-xs mt-0.5">
-                                    3
-                                </div>
-                                <p class="ml-3 text-sm text-gray-600">
-                                    <strong class="text-gray-900 block mb-1">Step 3</strong>
-                                    Share the voucher code with the cashier before billing.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-            <p>© 2026 VoucherMart Inc. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- JavaScript logic -->
-    <script>
-        // Initialize Lucide icons
+        // Initialize UI Icons
         lucide.createIcons();
 
-        // Voucher Data
-        const vouchers = [
-            { id: 1, value: 1000, price: 1000 },
-            { id: 2, value: 2000, price: 2000 },
-            { id: 3, value: 5000, price: 5000 },
-        ];
-
-        let selectedVoucherValue = 1000;
-        const optionsContainer = document.getElementById('voucher-options');
-        const priceDisplay = document.getElementById('price-display');
-        const mrpDisplay = document.getElementById('mrp-display');
-
-        // Render Voucher Options
-        function renderOptions() {
-            optionsContainer.innerHTML = ''; 
-            
-            vouchers.forEach(v => {
-                const isSelected = selectedVoucherValue === v.value;
-                // Changed cursor to pointer and added hover effect, removed disabled attribute for clickability
-                const buttonClasses = `voucher-option disabled rounded-lg border-2 p-3 text-left focus:outline-none flex flex-col justify-between ${isSelected ? 'selected' : ''} cursor-pointer hover:bg-gray-50`;
-                
-                const buttonHTML = `
-                    <button class="${buttonClasses}" onclick="showLoading()">
-                        <div class="w-full h-16 bg-gradient-to-br from-[#c89845] to-[#f4d17f] rounded flex items-center justify-center mb-2 shadow-inner border border-yellow-600/30 relative opacity-80">
-                            <span class="text-white font-bold drop-shadow-md text-sm">CARD VALUE</span><br/>
-                            <span class="text-white font-bold drop-shadow-md absolute mt-6 text-lg">₹${v.value}</span>
-                        </div>
-                        <div class="text-center w-full">
-                            <span class="text-sm font-semibold text-gray-900">Pay ₹${v.price}</span>
-                        </div>
-                        <div class="strike-through-overlay">
-                            <div class="strike-through-line"></div>
-                        </div>
-                    </button>
-                `;
-                optionsContainer.insertAdjacentHTML('beforeend', buttonHTML);
-            });
-        }
-
-        renderOptions();
-
-        // --- LOADING OVERLAY LOGIC ---
-        function showLoading(event) {
-            if(event) event.preventDefault(); // Prevent default link behavior
-            const overlay = document.getElementById('loading-overlay');
-            overlay.style.display = 'flex';
-
-            // 2 seconds ke baad overlay hatao
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 2000);
-        }
-
-        // Attach event listener to all elements with class 'nav-link'
-        document.addEventListener('DOMContentLoaded', () => {
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', showLoading);
-            });
-        });
+        // ---------------- WINDOW FUNCTIONS FOR UI ----------------
         
+        window.switchView = function(view) {
+            const customerView = document.getElementById('customer-view');
+            const adminView = document.getElementById('admin-view');
+            const btnCustomer = document.getElementById('btn-nav-customer');
+            const btnAdmin = document.getElementById('btn-nav-admin');
+
+            if(view === 'customer') {
+                customerView.classList.remove('hidden-view');
+                adminView.classList.add('hidden-view');
+                btnCustomer.classList.replace('text-gray-400', 'text-rose-500');
+                btnAdmin.classList.replace('text-gray-900', 'text-gray-400');
+            } else {
+                customerView.classList.add('hidden-view');
+                adminView.classList.remove('hidden-view');
+                btnCustomer.classList.replace('text-rose-500', 'text-gray-400');
+                btnAdmin.classList.replace('text-gray-400', 'text-gray-900');
+                renderOrders();
+            }
+        };
+
+        window.switchTab = function(tab) {
+            currentAdminTab = tab;
+            const tabActive = document.getElementById('tab-active');
+            const tabCompleted = document.getElementById('tab-completed');
+
+            if(tab === 'active') {
+                tabActive.className = "flex-1 py-2 text-sm font-bold rounded-lg transition-all bg-white text-gray-900 shadow-sm";
+                tabCompleted.className = "flex-1 py-2 text-sm font-bold rounded-lg transition-all text-gray-500";
+            } else {
+                tabCompleted.className = "flex-1 py-2 text-sm font-bold rounded-lg transition-all bg-white text-green-600 shadow-sm";
+                tabActive.className = "flex-1 py-2 text-sm font-bold rounded-lg transition-all text-gray-500";
+            }
+            renderOrders();
+        };
+
+        window.openOrderModal = function(productName) {
+            currentProduct = productName;
+            document.getElementById('modal-product-name').innerText = `Item: ${productName}`;
+            
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('cust-date').value = tomorrow.toISOString().split('T')[0];
+            
+            document.getElementById('order-modal').classList.remove('hidden');
+            document.getElementById('order-modal').classList.add('flex');
+        };
+
+        window.closeOrderModal = function() {
+            document.getElementById('order-modal').classList.add('hidden');
+            document.getElementById('order-modal').classList.remove('flex');
+            document.getElementById('order-form').reset();
+            document.getElementById('form-content').classList.remove('hidden');
+            document.getElementById('success-message').classList.add('hidden');
+            document.getElementById('success-message').classList.remove('flex');
+        };
+
+        window.submitOrder = async function(event) {
+            event.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = "Sending...";
+            btn.disabled = true;
+
+            const orderData = {
+                product: currentProduct,
+                name: document.getElementById('cust-name').value,
+                phone: document.getElementById('cust-phone').value,
+                occasion: document.getElementById('cust-occasion').value,
+                date: document.getElementById('cust-date').value,
+                time: document.getElementById('cust-time').value,
+                details: document.getElementById('cust-details').value,
+                status: 'New',
+                createdAt: new Date().toISOString(),
+                userId: userUid || 'unknown'
+            };
+
+            try {
+                await addDoc(collection(db, "orders"), orderData);
+                document.getElementById('form-content').classList.add('hidden');
+                document.getElementById('success-message').classList.remove('hidden');
+                document.getElementById('success-message').classList.add('flex');
+                
+                setTimeout(() => {
+                    closeOrderModal();
+                    btn.innerText = "Confirm Order";
+                    btn.disabled = false;
+                }, 2500);
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Database me save nahi hua. Firebase rules check karein!");
+                btn.innerText = "Confirm Order";
+                btn.disabled = false;
+            }
+        };
+
+        window.changeOrderStatus = async function(id, newStatus) {
+            try {
+                await updateDoc(doc(db, "orders", id), { status: newStatus });
+            } catch (error) {
+                console.error("Error updating document: ", error);
+            }
+        };
+
+        // Render UI
+        function renderOrders() {
+            const activeOrders = allOrders.filter(o => o.status !== 'Delivered');
+            const completedOrders = allOrders.filter(o => o.status === 'Delivered');
+            
+            document.getElementById('total-orders-count').innerText = allOrders.length;
+            document.getElementById('pending-count').innerText = activeOrders.length;
+            document.getElementById('completed-count').innerText = completedOrders.length;
+
+            const displayOrders = currentAdminTab === 'active' ? activeOrders : completedOrders;
+            const container = document.getElementById('orders-container');
+            const emptyState = document.getElementById('empty-state');
+            
+            container.innerHTML = '';
+            
+            if(displayOrders.length === 0) {
+                emptyState.style.display = 'block';
+                return;
+            }
+            emptyState.style.display = 'none';
+
+            displayOrders.forEach(order => {
+                const statusColor = order.status === 'New' ? 'bg-blue-100 text-blue-700' : 
+                                   order.status === 'Baking' ? 'bg-orange-100 text-orange-700' : 
+                                   'bg-green-100 text-green-700';
+
+                const card = document.createElement('div');
+                card.className = 'bg-white p-4 rounded-2xl shadow-sm border border-gray-100';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-sm">${order.name}</h3>
+                            <p class="text-[11px] text-rose-500 font-bold mt-0.5">${order.product} • ${order.occasion}</p>
+                        </div>
+                        <select onchange="changeOrderStatus('${order.id}', this.value)" class="text-[11px] font-bold px-2 py-1 rounded-full outline-none border-none cursor-pointer ${statusColor}">
+                            <option value="New" ${order.status === 'New' ? 'selected' : ''}>New Order</option>
+                            <option value="Baking" ${order.status === 'Baking' ? 'selected' : ''}>Baking</option>
+                            <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Completed ✓</option>
+                        </select>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-xl text-xs space-y-2 mb-2">
+                        <div class="flex items-center text-gray-600">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 mr-2 text-gray-400"></i>
+                            <span class="font-semibold">${formatDate(order.date)}</span> &nbsp;at&nbsp; <span class="font-semibold">${order.time}</span>
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i data-lucide="phone" class="w-3.5 h-3.5 mr-2 text-gray-400"></i>
+                            <a href="https://wa.me/91${order.phone}" target="_blank" class="text-blue-600 font-semibold hover:underline">${order.phone}</a>
+                        </div>
+                    </div>
+                    <div class="text-xs text-gray-700 border-t pt-2 border-gray-100 mt-2">
+                        <span class="font-bold text-gray-500 block mb-1">Details:</span>
+                        ${order.details}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            return new Date(dateString).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
     </script>
 </body>
 </html>
+
+```
+### ⚠️ Aakhri aur Sabse Zaroori Kaam:
+Kyunki maine database ka code add kar diya hai, abhi form submit karne par database error aa sakta hai. Usko solve karne ke liye aapko **Firebase Console** mein jaakar ye do cheezein karni hongi:
+ 1. **Authentication:** Firebase Console mein Authentication on karein aur **Anonymous** sign-in ko enable karein.
+ 2. **Firestore Rules:** Firestore Database khol kar Rules tab mein jayein, purana code hatayein aur ye paste karke **Publish** karein:
+   ```javascript
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /orders/{document=**} {
+         allow read, write: if true; 
+       }
+     }
+   }
+   
+   
+   
+   ```
+```
+
+```
