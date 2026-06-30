@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -417,24 +417,5 @@
 </body>
 </html>
 
-```
-### ⚠️ Aakhri aur Sabse Zaroori Kaam:
-Kyunki maine database ka code add kar diya hai, abhi form submit karne par database error aa sakta hai. Usko solve karne ke liye aapko **Firebase Console** mein jaakar ye do cheezein karni hongi:
- 1. **Authentication:** Firebase Console mein Authentication on karein aur **Anonymous** sign-in ko enable karein.
- 2. **Firestore Rules:** Firestore Database khol kar Rules tab mein jayein, purana code hatayein aur ye paste karke **Publish** karein:
-   ```javascript
-   rules_version = '2';
-   service cloud.firestore {
-     match /databases/{database}/documents {
-       match /orders/{document=**} {
-         allow read, write: if true; 
-       }
-     }
-   }
-   
-   
-   
-   ```
-```
 
-```
+   
