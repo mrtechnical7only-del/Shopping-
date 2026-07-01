@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Packs_n_Bakes By Saleha</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -24,9 +25,10 @@
 
     <div class="max-w-md mx-auto bg-white min-h-screen relative shadow-2xl pb-20 overflow-x-hidden">
 
+        <!-- ==================== CUSTOMER PANEL ==================== -->
         <div id="customer-view" class="w-full min-h-screen bg-pink-50">
             <div class="bg-gradient-to-br from-pink-200 to-rose-100 rounded-b-[2.5rem] p-8 text-center shadow-sm relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-20"><i data-lucide="cake" class="w-24 h-24 text-rose-500"></i></div>
+                <div class="absolute top-0 Rein-0 p-4 opacity-20"><i data-lucide="cake" class="w-24 h-24 text-rose-500"></i></div>
                 <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg border-4 border-pink-50 mb-3 relative z-10">
                     <i data-lucide="cookie" class="w-12 h-12 text-rose-400"></i>
                 </div>
@@ -40,32 +42,33 @@
                     <i data-lucide="shopping-bag" class="w-5 h-5 mr-2 text-pink-500"></i> Hamare Specials
                 </h2>
 
+                <!-- Product 1 -->
                 <div onclick="openOrderModal('Custom Chocolate Cake')" class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 mb-3 flex items-center cursor-pointer active:scale-95 transition-transform">
                     <div class="w-14 h-14 bg-pink-50 rounded-xl flex items-center justify-center mr-4 shrink-0"><i data-lucide="cake" class="w-8 h-8 text-pink-500"></i></div>
                     <div class="flex-1">
                         <h3 class="font-bold text-sm text-gray-800">Custom Cakes</h3>
                         <p class="text-[11px] text-gray-500 line-clamp-1 mt-0.5">Aapki pasand ka design aur flavour.</p>
-                        <p class="text-rose-500 font-bold text-xs mt-1">Starting ₹800/kg</p>
+                        <p class="text-rose-500 font-bold text-xs mt-1">Starting ₹600/-</p>
                     </div>
                     <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
                 </div>
 
+                <!-- Product 2 -->
                 <div onclick="openOrderModal('Brownies Box')" class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 mb-3 flex items-center cursor-pointer active:scale-95 transition-transform">
                     <div class="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center mr-4 shrink-0"><i data-lucide="coffee" class="w-8 h-8 text-amber-600"></i></div>
                     <div class="flex-1">
                         <h3 class="font-bold text-sm text-gray-800">Assorted Brownies</h3>
                         <p class="text-[11px] text-gray-500 line-clamp-1 mt-0.5">Fudgy, gooey aur bahut tasty.</p>
-                        <p class="text-rose-500 font-bold text-xs mt-1">₹450 / Box</p>
                     </div>
                     <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
                 </div>
 
+                <!-- Product 3 -->
                 <div onclick="openOrderModal('Surprise Hamper')" class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 mb-3 flex items-center cursor-pointer active:scale-95 transition-transform">
                     <div class="w-14 h-14 bg-rose-50 rounded-xl flex items-center justify-center mr-4 shrink-0"><i data-lucide="gift" class="w-8 h-8 text-rose-500"></i></div>
                     <div class="flex-1">
                         <h3 class="font-bold text-sm text-gray-800">Surprise Hampers</h3>
                         <p class="text-[11px] text-gray-500 line-clamp-1 mt-0.5">Balloons aur chocolates ke sath.</p>
-                        <p class="text-rose-500 font-bold text-xs mt-1">Custom Price</p>
                     </div>
                     <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
                 </div>
@@ -76,12 +79,36 @@
             </div>
         </div>
 
+        <!-- ==================== ADMIN PASSWORD PROMPT ==================== -->
+        <div id="admin-auth-view" class="w-full min-h-screen bg-gray-50 p-6 hidden-view flex flex-col justify-center items-center">
+            <div class="bg-white p-6 rounded-3xl shadow-md w-full max-w-sm border border-gray-100 text-center">
+                <div class="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="lock" class="text-rose-500 w-6 h-6"></i>
+                </div>
+                <h2 class="text-lg font-bold text-gray-800 mb-1">Admin Security</h2>
+                <p class="text-xs text-gray-500 mb-4">Panel open karne ke liye password enter karein.</p>
+                
+                <input type="password" id="admin-password-input" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none text-center text-sm mb-3 focus:border-rose-400" placeholder="••••••••">
+                <p id="auth-error-msg" class="text-red-500 text-xs font-bold mb-3 hidden">Galt password! Phir se try karein.</p>
+                
+                <button onclick="verifyAdminPassword()" class="w-full bg-gray-900 text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition-transform">
+                    Login
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== ADMIN PANEL ==================== -->
         <div id="admin-view" class="w-full min-h-screen bg-gray-50 hidden-view">
-            <div class="bg-gray-900 text-white p-6 pb-12 rounded-b-[2rem]">
-                <h1 class="text-xl font-bold flex items-center">
-                    <i data-lucide="layout-dashboard" class="w-6 h-6 mr-2 text-rose-400"></i> Admin Panel
-                </h1>
-                <p class="text-gray-400 text-xs mt-1">Apne orders aur status yahan manage karein.</p>
+            <div class="bg-gray-900 text-white p-6 pb-12 rounded-b-[2rem] flex justify-between items-start">
+                <div>
+                    <h1 class="text-xl font-bold flex items-center">
+                        <i data-lucide="layout-dashboard" class="w-6 h-6 mr-2 text-rose-400"></i> Admin Panel
+                    </h1>
+                    <p class="text-gray-400 text-xs mt-1">Apne orders aur status yahan manage karein.</p>
+                </div>
+                <button onclick="logoutAdmin()" class="bg-gray-800 text-gray-300 p-2 rounded-xl text-xs font-bold hover:bg-gray-700">
+                    Logout
+                </button>
             </div>
 
             <div class="px-5 -mt-6">
@@ -102,14 +129,10 @@
                      </div>
                 </div>
 
+                <!-- Tabs -->
                 <div class="flex bg-gray-200 p-1 rounded-xl mb-4">
                     <button onclick="switchTab('active')" id="tab-active" class="flex-1 py-2 text-sm font-bold rounded-lg transition-all bg-white text-gray-900 shadow-sm">Active Orders</button>
                     <button onclick="switchTab('completed')" id="tab-completed" class="flex-1 py-2 text-sm font-bold rounded-lg transition-all text-gray-500">Completed</button>
-                </div>
-
-                <div id="loader" class="text-center py-10 hidden">
-                    <div class="animate-spin w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full mx-auto mb-2"></div>
-                    <p class="text-gray-500 text-sm">Loading orders...</p>
                 </div>
 
                 <div id="empty-state" class="text-center py-10 bg-white rounded-2xl border border-dashed border-gray-300">
@@ -121,15 +144,16 @@
             </div>
         </div>
 
+        <!-- ==================== ORDER MODAL ==================== -->
         <div id="order-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex-col justify-end">
-            <div class="bg-white w-full max-w-md h-[85vh] rounded-t-3xl p-6 relative overflow-y-auto modal-enter shadow-2xl flex flex-col">
+            <div class="bg-white w-full max-w-md h-[85vh] rounded-t-3xl p-6 relative overflow-y-auto shadow-2xl flex flex-col">
                 <button onclick="closeOrderModal()" class="absolute right-5 top-5 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-200">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
                 
                 <div id="form-content">
                     <h2 class="text-xl font-black text-gray-800 mb-1">Place Your Order</h2>
-                    <div class="inline-block bg-rose-50 border border-rose-100 px-3 py-1 rounded-lg mb-5">
+                    <div class="inline-block bg-rose-50 border border-rose-100 px-3 py-1 rounded-lg mb-4">
                         <p id="modal-product-name" class="text-rose-600 text-xs font-bold">Item: Custom Order</p>
                     </div>
 
@@ -138,7 +162,7 @@
                             <label class="text-xs font-bold text-gray-700 block mb-1">Aapka Naam *</label>
                             <div class="relative">
                                 <i data-lucide="user" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
-                                <input required type="text" id="cust-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-9 pr-3 outline-none focus:border-rose-400 focus:bg-white text-sm" placeholder="Aapka naam">
+                                <input required type="text" id="cust-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-9 pr-3 outline-none focus:border-rose-400 text-sm" placeholder="Aapka naam">
                             </div>
                         </div>
 
@@ -146,13 +170,37 @@
                             <label class="text-xs font-bold text-gray-700 block mb-1">WhatsApp Number *</label>
                             <div class="relative">
                                 <i data-lucide="phone" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
-                                <input required type="tel" id="cust-phone" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-9 pr-3 outline-none focus:border-rose-400 focus:bg-white text-sm" placeholder="10 digit number">
+                                <input required type="tel" id="cust-phone" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 pl-9 pr-3 outline-none focus:border-rose-400 text-sm" placeholder="10 digit number">
+                            </div>
+                        </div>
+
+                        <!-- NEW DROPDOWNS FOR FLAVOURS & TOPPINGS -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs font-bold text-gray-700 block mb-1">Cake Flavour *</label>
+                                <select id="cust-flavour" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-2 outline-none focus:border-rose-400 text-xs text-gray-700">
+                                    <option>Chocochips</option>
+                                    <option>Double chocolate walnut</option>
+                                    <option>Triple chocolate</option>
+                                    <option>Not Applicable</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-700 block mb-1">Topping *</label>
+                                <select id="cust-topping" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-2 outline-none focus:border-rose-400 text-xs text-gray-700">
+                                    <option>Biscoff</option>
+                                    <option>Nutella</option>
+                                    <option>Pistachio</option>
+                                    <option>Ghanach Chocolate</option>
+                                    <option>White truffle</option>
+                                    <option>None</option>
+                                </select>
                             </div>
                         </div>
 
                         <div>
                             <label class="text-xs font-bold text-gray-700 block mb-1">Occasion (Function kya hai?)</label>
-                            <select id="cust-occasion" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none focus:border-rose-400 focus:bg-white text-sm text-gray-700">
+                            <select id="cust-occasion" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none focus:border-rose-400 text-sm text-gray-700">
                                 <option>Birthday 🎂</option>
                                 <option>Anniversary 💑</option>
                                 <option>Wedding 💍</option>
@@ -162,18 +210,18 @@
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="text-xs font-bold text-gray-700 block mb-1">Kis Date Ko Chahiye? *</label>
+                                <label class="text-xs font-bold text-gray-700 block mb-1">Date *</label>
                                 <input required type="date" id="cust-date" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none focus:border-rose-400 text-sm">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-gray-700 block mb-1">Time? *</label>
+                                <label class="text-xs font-bold text-gray-700 block mb-1">Time *</label>
                                 <input required type="time" id="cust-time" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none focus:border-rose-400 text-sm">
                             </div>
                         </div>
 
                         <div>
-                            <label class="text-xs font-bold text-gray-700 block mb-1">Flavour, Weight, aur Details *</label>
-                            <textarea required id="cust-details" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none focus:border-rose-400 focus:bg-white text-sm" placeholder="Cake par kya likhna hai?"></textarea>
+                            <label class="text-xs font-bold text-gray-700 block mb-1">Weight ya Extra Details *</label>
+                            <textarea required id="cust-details" rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2.5 px-3 outline-none focus:border-rose-400 text-sm" placeholder="Cake ka weight kitna chahiye? Cake par kya likhna hai?"></textarea>
                         </div>
 
                         <button id="submit-btn" type="submit" class="w-full bg-rose-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-rose-200 hover:bg-rose-600 active:scale-95 transition text-sm mt-4">
@@ -187,11 +235,12 @@
                         <i data-lucide="check-circle-2" class="w-10 h-10 text-green-500"></i>
                     </div>
                     <h2 class="text-2xl font-black text-gray-800 mb-2">Order Sent!</h2>
-                    <p class="text-gray-500 text-center text-sm px-4">Aapka order database mein chala gaya hai. Hum WhatsApp par contact karenge.</p>
+                    <p class="text-gray-500 text-center text-sm px-4">Aapka order database mein chala gaya hai.</p>
                 </div>
             </div>
         </div>
 
+        <!-- ==================== BOTTOM NAV ==================== -->
         <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t border-gray-100 flex justify-around items-center px-4 py-2 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-40 rounded-t-[2rem]">
             <button onclick="switchView('customer')" id="btn-nav-customer" class="flex flex-col items-center p-2 text-rose-500 transition-colors">
                 <i data-lucide="store" class="w-6 h-6 mb-1"></i>
@@ -204,12 +253,12 @@
         </div>
     </div>
 
+    <!-- ==================== FIREBASE & LOGIC ==================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // AAPKA FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyAmQz70AP_GThf9hMacD9vs8mMiDHrXQKM",
             authDomain: "packs-d0cfb.firebaseapp.com",
@@ -227,44 +276,72 @@
         let allOrders = [];
         let currentProduct = '';
         let currentAdminTab = 'active';
+        let isAdminLoggedIn = false; // Auth check state
 
-        // Anonymous Login for customers
         signInAnonymously(auth).then((userCred) => {
             userUid = userCred.user.uid;
-            console.log("Logged in anonymously");
         }).catch((error) => console.error("Auth Error:", error));
 
-        // Fetch Orders
         const ordersRef = collection(db, "orders");
         onSnapshot(ordersRef, (snapshot) => {
             allOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             allOrders.sort((a, b) => new Date(a.date) - new Date(b.date));
             renderOrders();
-        }, (error) => console.log("Listen error:", error));
+        }, (error) => console.log("Database error:", error));
 
-        // Initialize UI Icons
         lucide.createIcons();
 
-        // ---------------- WINDOW FUNCTIONS FOR UI ----------------
-        
+        // UI View Switcher
         window.switchView = function(view) {
             const customerView = document.getElementById('customer-view');
+            const adminAuthView = document.getElementById('admin-auth-view');
             const adminView = document.getElementById('admin-view');
             const btnCustomer = document.getElementById('btn-nav-customer');
             const btnAdmin = document.getElementById('btn-nav-admin');
 
             if(view === 'customer') {
                 customerView.classList.remove('hidden-view');
+                adminAuthView.classList.add('hidden-view');
                 adminView.classList.add('hidden-view');
                 btnCustomer.classList.replace('text-gray-400', 'text-rose-500');
                 btnAdmin.classList.replace('text-gray-900', 'text-gray-400');
             } else {
                 customerView.classList.add('hidden-view');
-                adminView.classList.remove('hidden-view');
                 btnCustomer.classList.replace('text-rose-500', 'text-gray-400');
                 btnAdmin.classList.replace('text-gray-400', 'text-gray-900');
-                renderOrders();
+                
+                // Check if admin password is already validated
+                if (isAdminLoggedIn) {
+                    adminView.classList.remove('hidden-view');
+                    renderOrders();
+                } else {
+                    adminAuthView.classList.remove('hidden-view');
+                }
             }
+        };
+
+        // Admin Password Verification
+        window.verifyAdminPassword = function() {
+            const enteredPass = document.getElementById('admin-password-input').value;
+            const errMsg = document.getElementById('auth-error-msg');
+            const adminAuthView = document.getElementById('admin-auth-view');
+            const adminView = document.getElementById('admin-view');
+
+            if (enteredPass === "Saleha@786") {
+                isAdminLoggedIn = true;
+                errMsg.classList.add('hidden');
+                document.getElementById('admin-password-input').value = ""; // clear input
+                adminAuthView.classList.add('hidden-view');
+                adminView.classList.remove('hidden-view');
+                renderOrders();
+            } else {
+                errMsg.classList.remove('hidden');
+            }
+        };
+
+        window.logoutAdmin = function() {
+            isAdminLoggedIn = false;
+            switchView('customer');
         };
 
         window.switchTab = function(tab) {
@@ -300,7 +377,6 @@
             document.getElementById('order-form').reset();
             document.getElementById('form-content').classList.remove('hidden');
             document.getElementById('success-message').classList.add('hidden');
-            document.getElementById('success-message').classList.remove('flex');
         };
 
         window.submitOrder = async function(event) {
@@ -313,6 +389,8 @@
                 product: currentProduct,
                 name: document.getElementById('cust-name').value,
                 phone: document.getElementById('cust-phone').value,
+                flavour: document.getElementById('cust-flavour').value,
+                topping: document.getElementById('cust-topping').value,
                 occasion: document.getElementById('cust-occasion').value,
                 date: document.getElementById('cust-date').value,
                 time: document.getElementById('cust-time').value,
@@ -334,22 +412,18 @@
                     btn.disabled = false;
                 }, 2500);
             } catch (error) {
-                console.error("Error adding document: ", error);
-                alert("Database me save nahi hua. Firebase rules check karein!");
+                console.error("Error writing document: ", error);
+                alert("Database authentication failure. Please ensure strict Firestore setup rules are active.");
                 btn.innerText = "Confirm Order";
                 btn.disabled = false;
             }
         };
 
         window.changeOrderStatus = async function(id, newStatus) {
-            try {
-                await updateDoc(doc(db, "orders", id), { status: newStatus });
-            } catch (error) {
-                console.error("Error updating document: ", error);
-            }
+            try { await updateDoc(doc(db, "orders", id), { status: newStatus }); } 
+            catch (error) { console.error("Error updating status: ", error); }
         };
 
-        // Render UI
         function renderOrders() {
             const activeOrders = allOrders.filter(o => o.status !== 'Delivered');
             const completedOrders = allOrders.filter(o => o.status === 'Delivered');
@@ -383,7 +457,7 @@
                             <h3 class="font-bold text-gray-800 text-sm">${order.name}</h3>
                             <p class="text-[11px] text-rose-500 font-bold mt-0.5">${order.product} • ${order.occasion}</p>
                         </div>
-                        <select onchange="changeOrderStatus('${order.id}', this.value)" class="text-[11px] font-bold px-2 py-1 rounded-full outline-none border-none cursor-pointer ${statusColor}">
+                        <select onchange="changeOrderStatus('${order.id}', this.value)" class="text-[11px] font-bold px-2 py-1 rounded-full border-none outline-none cursor-pointer ${statusColor}">
                             <option value="New" ${order.status === 'New' ? 'selected' : ''}>New Order</option>
                             <option value="Baking" ${order.status === 'Baking' ? 'selected' : ''}>Baking</option>
                             <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Completed ✓</option>
@@ -391,16 +465,20 @@
                     </div>
                     <div class="bg-gray-50 p-3 rounded-xl text-xs space-y-2 mb-2">
                         <div class="flex items-center text-gray-600">
-                            <i data-lucide="calendar" class="w-3.5 h-3.5 mr-2 text-gray-400"></i>
+                            <i data-lucide="cake-slice" class="w-3.5 h-3.5 mr-2 text-gray-400 shrink-0"></i>
+                            <span>Flavour: <b class="text-gray-800">${order.flavour || 'N/A'}</b> | Topping: <b class="text-gray-800">${order.topping || 'N/A'}</b></span>
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 mr-2 text-gray-400 shrink-0"></i>
                             <span class="font-semibold">${formatDate(order.date)}</span> &nbsp;at&nbsp; <span class="font-semibold">${order.time}</span>
                         </div>
                         <div class="flex items-center text-gray-600">
-                            <i data-lucide="phone" class="w-3.5 h-3.5 mr-2 text-gray-400"></i>
+                            <i data-lucide="phone" class="w-3.5 h-3.5 mr-2 text-gray-400 shrink-0"></i>
                             <a href="https://wa.me/91${order.phone}" target="_blank" class="text-blue-600 font-semibold hover:underline">${order.phone}</a>
                         </div>
                     </div>
                     <div class="text-xs text-gray-700 border-t pt-2 border-gray-100 mt-2">
-                        <span class="font-bold text-gray-500 block mb-1">Details:</span>
+                        <span class="font-bold text-gray-500 block mb-1">Weight & Extra Details:</span>
                         ${order.details}
                     </div>
                 `;
@@ -417,5 +495,3 @@
 </body>
 </html>
 
-
-   
