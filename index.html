@@ -18,7 +18,7 @@
         }
         .bake-joy { animation: bakePulse 1.5s infinite ease-in-out; }
         @keyframes bakePulse {
-            0% { transform: scale(1); }
+            0 open { transform: scale(1); }
             50% { transform: scale(1.15); rotate: 5deg; }
             100% { transform: scale(1); }
         }
@@ -276,7 +276,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // NEW REFRESHED TELEGRAM CREDENTIALS
+        // TELEGRAM RE-VERIFIED CREDENTIALS
         const tgToken = "8740881261:AAFx56lSPNLqCc-21ovJVq8c9jsyos8Fnig";
         const tgChatId = "7945654923";
 
@@ -399,26 +399,26 @@
             }
         };
 
-        // RELIABLE TELEGRAM SENDER WITH KEEPALIVE BACKUP
+        // FIXED SENDER OVERRIDING NO-CORS SECURITY
         async function sendTelegramAlert(data) {
-            const cleanText = `<b>🔔 Packs_n_Bakes - NAYA ORDER!</b>\n\n` +
-                              `👤 <b>Naam:</b> ${data.name}\n` +
-                              `📸 <b>Insta:</b> @${data.insta}\n` +
-                              `📞 <b>WhatsApp:</b> ${data.phone}\n` +
-                              `🧁 <b>Product:</b> ${data.product}\n` +
-                              `🍰 <b>Flavour:</b> ${data.flavour} | <b>Topping:</b> ${data.topping}\n` +
-                              `🎉 <b>Occasion:</b> ${data.occasion}\n` +
-                              `📅 <b>Date:</b> ${data.date} | <b>Time:</b> ${data.time}\n` +
-                              `🚚 <b>Type:</b> ${data.deliveryType}\n` +
-                              (data.address ? `📍 <b>Address:</b> ${data.address}\n` : '') +
-                              `📝 <b>Details:</b> ${data.details}`;
+            const cleanText = `🔔 Packs_n_Bakes - NAYA ORDER!\n\n` +
+                              `Naam: ${data.name}\n` +
+                              `Insta: @${data.insta}\n` +
+                              `WhatsApp: ${data.phone}\n` +
+                              `Product: ${data.product}\n` +
+                              `Flavour: ${data.flavour} | Topping: ${data.topping}\n` +
+                              `Occasion: ${data.occasion}\n` +
+                              `Date: ${data.date} | Time: ${data.time}\n` +
+                              `Type: ${data.deliveryType}\n` +
+                              (data.address ? `Address: ${data.address}\n` : '') +
+                              `Details: ${data.details}`;
 
-            const url = `https://api.telegram.org/bot${tgToken}/sendMessage`;
+            // URL format avoids payload parsing constraints completely
+            const url = `https://api.telegram.org/bot${tgToken}/sendMessage?chat_id=${tgChatId}&text=${encodeURIComponent(cleanText)}`;
             try {
                 await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: tgChatId, text: cleanText, parse_mode: 'HTML' }),
+                    method: 'GET',
+                    mode: 'no-cors',
                     keepalive: true
                 });
             } catch (e) { console.error("Telegram Notification Fail:", e); }
@@ -464,7 +464,7 @@
             try {
                 await addDoc(collection(db, "orders"), orderData);
                 
-                // Safe background trigger
+                // Fire and forget telegram payload securely
                 sendTelegramAlert(orderData);
 
                 document.getElementById('form-content').classList.add('hidden');
