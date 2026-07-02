@@ -399,26 +399,26 @@
             }
         };
 
-        // TELEGRAM MESSAGE SENDER BACKGROUND FUNCTION
+        // TELEGRAM MESSAGE SENDER BACKGROUND FUNCTION (FIXED WITH SECURE HTML)
         async function sendTelegramAlert(data) {
-            const textMsg = `🔔 *Packs_n_Bakes - NAYA ORDER!* \n\n` +
-                            `👤 *Naam:* ${data.name}\n` +
-                            `📸 *Instagram:* @${data.insta}\n` +
-                            `📞 *WhatsApp:* ${data.phone}\n` +
-                            `🧁 *Product:* ${data.product}\n` +
-                            `🍰 *Flavour:* ${data.flavour} | *Topping:* ${data.topping}\n` +
-                            `🎉 *Occasion:* ${data.occasion}\n` +
-                            `📅 *Date:* ${data.date} | *Time:* ${data.time}\n` +
-                            `🚚 *Type:* ${data.deliveryType}\n` +
-                            (data.address ? `📍 *Address:* ${data.address}\n` : '') +
-                            `📝 *Details:* ${data.details}`;
+            const textMsg = `<b>🔔 Packs_n_Bakes - NAYA ORDER!</b> \n\n` +
+                            `👤 <b>Naam:</b> ${data.name}\n` +
+                            `📸 <b>Instagram:</b> @${data.insta}\n` +
+                            `📞 <b>WhatsApp:</b> ${data.phone}\n` +
+                            `🧁 <b>Product:</b> ${data.product}\n` +
+                            `🍰 <b>Flavour:</b> ${data.flavour} | <b>Topping:</b> ${data.topping}\n` +
+                            `🎉 <b>Occasion:</b> ${data.occasion}\n` +
+                            `📅 <b>Date:</b> ${data.date} | <b>Time:</b> ${data.time}\n` +
+                            `🚚 <b>Type:</b> ${data.deliveryType}\n` +
+                            (data.address ? `📍 <b>Address:</b> ${data.address}\n` : '') +
+                            `📝 <b>Details:</b> ${data.details}`;
 
             const url = `https://api.telegram.org/bot${tgToken}/sendMessage`;
             try {
                 await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: tgChatId, text: textMsg, parse_mode: 'Markdown' })
+                    body: JSON.stringify({ chat_id: tgChatId, text: textMsg, parse_mode: 'HTML' })
                 });
             } catch (e) { console.error("Telegram Notification Fail:", e); }
         }
@@ -432,7 +432,7 @@
             let deliveryType = "N/A";
             let address = "";
             if(currentProduct === 'Custom Chocolate Cake' || currentProduct === 'Brownies Box') {
-                deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
+                deliveryType = document.querySelector('input[name="delivery-type"][value="Delivery"]').checked ? 'Delivery' : 'Pickup';
                 if(deliveryType === 'Delivery') address = document.getElementById('cust-address').value;
             }
 
