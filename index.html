@@ -276,8 +276,8 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // TELEGRAM CONFIGURATION
-        const tgToken = "8952285587:AAGhqyht-kTEzXE1WlgjmacukvRSlyvZUy0";
+        // NEW REFRESHED TELEGRAM CREDENTIALS
+        const tgToken = "8740881261:AAFx56lSPNLqCc-21ovJVq8c9jsyos8Fnig";
         const tgChatId = "7945654923";
 
         let userUid = null;
@@ -399,9 +399,9 @@
             }
         };
 
-        // KEEPALIVE ENHANCED TELEGRAM ALERTER
+        // RELIABLE TELEGRAM SENDER WITH KEEPALIVE BACKUP
         async function sendTelegramAlert(data) {
-            const cleanText = `🔔 <b>Packs_n_Bakes - NAYA ORDER!</b>\n\n` +
+            const cleanText = `<b>🔔 Packs_n_Bakes - NAYA ORDER!</b>\n\n` +
                               `👤 <b>Naam:</b> ${data.name}\n` +
                               `📸 <b>Insta:</b> @${data.insta}\n` +
                               `📞 <b>WhatsApp:</b> ${data.phone}\n` +
@@ -415,7 +415,6 @@
 
             const url = `https://api.telegram.org/bot${tgToken}/sendMessage`;
             try {
-                // keepalive targets requests execution even on layout updates/redirects
                 await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -465,7 +464,7 @@
             try {
                 await addDoc(collection(db, "orders"), orderData);
                 
-                // Safe non-blocking trigger
+                // Safe background trigger
                 sendTelegramAlert(orderData);
 
                 document.getElementById('form-content').classList.add('hidden');
