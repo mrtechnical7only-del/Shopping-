@@ -16,7 +16,6 @@
             from { transform: translateY(100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        /* Heartbeat / Baking joy animation */
         .bake-joy { animation: bakePulse 1.5s infinite ease-in-out; }
         @keyframes bakePulse {
             0% { transform: scale(1); }
@@ -102,7 +101,7 @@
                     <h1 class="text-xl font-bold flex items-center">
                         <i data-lucide="layout-dashboard" class="w-6 h-6 mr-2 text-rose-400"></i> Admin Panel
                     </h1>
-                    <p class="text-gray-400 text-xs mt-1">Apne orders aur payments manage karein.</p>
+                    <p class="text-gray-400 text-xs mt-1">Apne orders, payments aur repeat clients manage karein.</p>
                 </div>
                 <button onclick="logoutAdmin()" class="bg-gray-800 text-gray-300 p-2 rounded-xl text-xs font-bold hover:bg-gray-700">Logout</button>
             </div>
@@ -222,7 +221,6 @@
                     </form>
                 </div>
 
-                <!-- AMAZING SUCCESS VIEW WITH ANIMATION -->
                 <div id="success-message" class="hidden flex-col items-center justify-center h-full text-center px-4 py-8 modal-enter">
                     <div class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mb-6 border-4 border-white shadow-xl bake-joy">
                         <i data-lucide="heart" class="w-12 h-12 text-rose-500 fill-rose-500"></i>
@@ -281,6 +279,7 @@
         const ordersRef = collection(db, "orders");
         onSnapshot(ordersRef, (snapshot) => {
             allOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            // Base sort by creation date to show recent orders appropriately
             allOrders.sort((a, b) => new Date(a.date) - new Date(b.date));
             renderOrders();
         });
@@ -405,7 +404,7 @@
             const orderData = {
                 product: currentProduct,
                 name: document.getElementById('cust-name').value,
-                phone: document.getElementById('cust-phone').value,
+                phone: document.getElementById('cust-phone').value.trim(),
                 flavour: document.getElementById('cust-flavour').value,
                 topping: document.getElementById('cust-topping').value,
                 occasion: document.getElementById('cust-occasion').value,
@@ -444,12 +443,9 @@
             } catch (error) { console.error("Update error: ", error); }
         };
 
-        // NEW DELETE ORDER FUNCTION
         window.deleteOrder = async function(id) {
             if(confirm("Kya aap sach me ye order permanently delete karna chahte hain?")) {
-                try {
-                    await deleteDoc(doc(db, "orders", id));
-                } catch (error) { console.error("Error deleting order: ", error); }
+                try { await deleteDoc(doc(db, "orders", id)); } catch (error) { console.error("Error deleting order: ", error); }
             }
         };
 
@@ -471,13 +467,34 @@
                 let deliveryBadge = order.deliveryType === 'Delivery' ? `<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold">🚚 Delivery</span>` : order.deliveryType === 'Pickup' ? `<span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[10px] font-bold">🏪 Pickup</span>` : '';
                 let addressHtml = order.deliveryType === 'Delivery' && order.address ? `<div class="text-xs text-gray-700 bg-blue-50 p-2 rounded mt-2 border border-blue-100 break-words whitespace-pre-wrap"><span class="font-bold block mb-1">📍 Delivery Address:</span>${order.address}</div>` : '';
 
+                // === CRM FEATURE: TRACK REPEAT CUSTOMER BY PHONE ===
+                const clientOrders = allOrders.filter(o => o.phone === order.phone);
+                const orderCount = clientOrders.length;
+                let clientTagHtml = '';
+                let clientHistoryHtml = '';
+
+                if (orderCount > 1) {
+                    clientTagHtml = `<span class="inline-flex items-center bg-amber-100 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded-full mt-1"><i data-lucide="star" class="w-2.5 h-2.5 mr-1 fill-amber-500 text-amber-500"></i> Repeat Client (${orderCount} Orders)</span>`;
+                    
+                    // Purane orders ki dates list karne ke liye html
+                    const pastDates = clientOrders
+                        .filter(o => o.id !== order.id)
+                        .map(o => `${formatDate(o.date)} (${o.product})`)
+                        .join(', ');
+                    
+                    clientHistoryHtml = `<div class="bg-amber-50/60 text-[10px] text-amber-900 p-2 rounded-lg mt-2 border border-amber-100"><span class="font-bold">📜 History:</span> ${pastDates}</div>`;
+                } else {
+                    clientTagHtml = `<span class="inline-flex items-center bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full mt-1">🆕 New Customer</span>`;
+                }
+
                 const card = document.createElement('div');
                 card.className = 'bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative';
                 card.innerHTML = `
-                    <div class="flex justify-between items-start mb-2 pr-6">
+                    <div class="flex justify-between items-start mb-1 pr-6">
                         <div>
                             <h3 class="font-bold text-gray-800 text-sm">${order.name}</h3>
-                            <p class="text-[11px] text-rose-500 font-bold mt-0.5">${order.product}</p>
+                            <div class="flex flex-col">${clientTagHtml}</div>
+                            <p class="text-[11px] text-rose-500 font-bold mt-1">${order.product}</p>
                         </div>
                         <select onchange="updateOrderField('${order.id}', 'status', this.value)" class="text-[11px] font-bold px-2 py-1 rounded-full border-none outline-none cursor-pointer ${statusColor}">
                             <option value="New" ${order.status === 'New' ? 'selected' : ''}>New Order</option>
@@ -486,12 +503,11 @@
                         </select>
                     </div>
                     
-                    <!-- DELETE TRASH ICON -->
-                    <button onclick="deleteOrder('${order.id}')" class="absolute top-4 right-4 text-red-400 hover:text-red-600 p-1 rounded-lg transition-colors" title="Delete Order">
+                    <button onclick="deleteOrder('${order.id}')" class="absolute top-4 right-4 text-red-400 hover:text-red-600 p-1 rounded-lg transition-colors">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                     
-                    <div class="mb-2">${deliveryBadge}</div>
+                    <div class="mb-2 mt-1">${deliveryBadge}</div>
                     
                     <div class="bg-gray-50 p-3 rounded-xl text-xs space-y-2 mb-2">
                         <div class="flex items-center text-gray-600">
@@ -513,6 +529,7 @@
                         ${order.details}
                     </div>
                     ${addressHtml}
+                    ${clientHistoryHtml}
 
                     <div class="bg-orange-50 border border-orange-100 p-3 rounded-xl mt-3">
                         <div class="text-[11px] font-bold text-orange-800 mb-2 border-b border-orange-200 pb-1 flex items-center">
